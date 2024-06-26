@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "Vicidial installation AlmaLinux/RockyLinux with CyburPhone and Dynamic portal"
+echo "Vicidial installation AlmaLinux/RockyLinux"
 
 export LC_ALL=C
 
@@ -509,14 +509,14 @@ cat <<CRONTAB>> /root/crontab-file
 #00 22 * * * root cd /tmp/ && find . -name '*TILTXtmp*' -type f -delete
 
 ### Dynportal
-@reboot /usr/bin/VB-firewall --whitelist=ViciWhite --dynamic --quiet
-* * * * * /usr/bin/VB-firewall --whitelist=ViciWhite --dynamic --quiet
-* * * * * /usr/bin/VB-firewall --white --dynamic --quiet
-* * * * * sleep 10; /usr/bin/VB-firewall --white --dynamic --quiet
-* * * * * sleep 20; /usr/bin/VB-firewall --white --dynamic --quiet
-* * * * * sleep 30; /usr/bin/VB-firewall --white --dynamic --quiet
-* * * * * sleep 40; /usr/bin/VB-firewall --white --dynamic --quiet
-* * * * * sleep 50; /usr/bin/VB-firewall --white --dynamic --quiet
+###@reboot /usr/bin/VB-firewall --whitelist=ViciWhite --dynamic --quiet
+###* * * * * /usr/bin/VB-firewall --whitelist=ViciWhite --dynamic --quiet
+###* * * * * /usr/bin/VB-firewall --white --dynamic --quiet
+###* * * * * sleep 10; /usr/bin/VB-firewall --white --dynamic --quiet
+###* * * * * sleep 20; /usr/bin/VB-firewall --white --dynamic --quiet
+###* * * * * sleep 30; /usr/bin/VB-firewall --white --dynamic --quiet
+###* * * * * sleep 40; /usr/bin/VB-firewall --white --dynamic --quiet
+###* * * * * sleep 50; /usr/bin/VB-firewall --white --dynamic --quiet
 
 CRONTAB
 
@@ -589,42 +589,43 @@ chmod +x /etc/rc.d/rc.local
 systemctl enable rc-local
 systemctl start rc-local
 
+##########################################################################EDITADO#########################################
 ##Install CyburPhone
-cd /var/www/html
-git clone https://github.com/carpenox/CyburPhone.git
-chmod -R 744 CyburPhone
-chown -R apache:apache CyburPhone
+##cd /var/www/html
+##git clone https://github.com/carpenox/CyburPhone.git
+##chmod -R 744 CyburPhone
+##chown -R apache:apache CyburPhone
 
 ##Install Dynportal
-yum install -y firewalld
-cd /home
-wget https://dialer.one/dynportal.zip
-wget https://dialer.one/firewall.zip
-wget https://dialer.one/aggregate
-wget https://dialer.one/VB-firewall
+##yum install -y firewalld
+##cd /home
+##wget https://dialer.one/dynportal.zip
+##wget https://dialer.one/firewall.zip
+##wget https://dialer.one/aggregate
+##wget https://dialer.one/VB-firewall
 
-mkdir -p /var/www/vhosts/dynportal
-mv /home/dynportal.zip /var/www/vhosts/dynportal/
-mv /home/firewall.zip /etc/firewalld/
-cd /var/www/vhosts/dynportal/
-unzip dynportal.zip
-chmod -R 755 *
-chown -R apache:apache *
-cd etc/httpd/conf.d/
-mv viciportal-ssl.conf viciportal.conf /etc/httpd/conf.d/
-cd /etc/firewalld/
-unzip -o firewall.zip
-cd zones/
-rm -rf public.xml trusted.xml
-cd /etc/firewalld/
-mv -bf public.xml trusted.xml /etc/firewalld/zones/
-mv /home/aggregate /usr/bin/
-chmod +x /usr/bin/aggregate
-mv /home/VB-firewall /usr/bin/
-chmod +x /usr/bin/VB-firewall
+##mkdir -p /var/www/vhosts/dynportal
+##mv /home/dynportal.zip /var/www/vhosts/dynportal/
+##mv /home/firewall.zip /etc/firewalld/
+##cd /var/www/vhosts/dynportal/
+##unzip dynportal.zip
+##chmod -R 755 *
+##chown -R apache:apache *
+##cd etc/httpd/conf.d/
+##mv viciportal-ssl.conf viciportal.conf /etc/httpd/conf.d/
+##cd /etc/firewalld/
+##unzip -o firewall.zip
+##cd zones/
+##rm -rf public.xml trusted.xml
+##cd /etc/firewalld/
+##mv -bf public.xml trusted.xml /etc/firewalld/zones/
+##mv /home/aggregate /usr/bin/
+##chmod +x /usr/bin/aggregate
+##mv /home/VB-firewall /usr/bin/
+##chmod +x /usr/bin/VB-firewall
 
-firewall-offline-cmd --add-port=446/tcp --zone=public
-
+##firewall-offline-cmd --add-port=446/tcp --zone=public
+####################################################################END###############################################
 ##Fix ip_relay
 cd /usr/src/astguiclient/trunk/extras/ip_relay/
 unzip ip_relay_1.1.112705.zip
@@ -726,16 +727,16 @@ tee -a ~/.bashrc <<EOF
 /usr/sbin/asterisk -V
 EOF
 
-sed -i 's|#Banner none|Banner /etc/ssh/sshd_banner|g' /etc/ssh/sshd_config
+##sed -i 's|#Banner none|Banner /etc/ssh/sshd_banner|g' /etc/ssh/sshd_config
 
-tee -a /etc/ssh/sshd_banner <<EOF
-Thank you for choosing CyburDial and carpenox's auto installer!
+##tee -a /etc/ssh/sshd_banner <<EOF
+##Thank you for choosing CyburDial and carpenox's auto installer!
 
-Visit our Knowledge Base at https://www.dialer.one
+##Visit our Knowledge Base at https://www.dialer.one
 
-Support: info@dialer.one
-Skype Live Chat Support: https://join.skype.com/ujkQ7i5lV78O
-EOF
+##Support: info@dialer.one
+##Skype Live Chat Support: https://join.skype.com/ujkQ7i5lV78O
+##EOF
 
 #add rc-local as a service - thx to ras
 tee -a /etc/systemd/system/rc-local.service <<EOF
@@ -781,7 +782,7 @@ service firewalld start
 systemctl enable firewalld
 systemctl enable rc-local
 
-mv /etc/httpd/conf.d/viciportal-ssl.conf /etc/httpd/conf.d/viciportal-ssl.conf.off
+##mv /etc/httpd/conf.d/viciportal-ssl.conf /etc/httpd/conf.d/viciportal-ssl.conf.off
 
 read -p 'Press Enter to Reboot: '
 
