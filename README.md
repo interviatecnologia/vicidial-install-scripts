@@ -4,7 +4,7 @@ Alterado para uso sem Dynportal e Cyberphone
 Alma 9 ISO – https://repo.almalinux.org/almalinux/9/isos/x86_64/AlmaLinux-9-latest-x86_64-dvd.iso
 
 Passo 1 – Baixe as dependências
-timedatectl set-timezone America/New_York
+timedatectl set-timezone America/Sao_Paulo
 
 yum check-update
 yum update -y
