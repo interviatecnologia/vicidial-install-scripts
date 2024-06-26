@@ -774,10 +774,10 @@ chkconfig asterisk off
 yum in certbot -y
 systemctl enable certbot-renew.timer
 systemctl start certbot-renew.timer
-cd /usr/src/vicidial-install-scripts
-chmod +x vicidial-enable-webrtc.sh
+##cd /usr/src/vicidial-install-scripts
+##chmod +x vicidial-enable-webrtc.sh
 service firewalld stop
-./vicidial-enable-webrtc.sh
+##./vicidial-enable-webrtc.sh
 service firewalld start
 systemctl enable firewalld
 systemctl enable rc-local
