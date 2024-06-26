@@ -1,6 +1,9 @@
 Como – Instalar o Vicidial no Alma Linux 9 com meu novo instalador automático
+
 Baseado: https://dialer.one/how-to-install-vicidial-on-alma-linux-9-with-my-new-auto-installer/
+
 Alterado para uso sem Dynportal e Cyberphone
+
 Alma 9 ISO – https://repo.almalinux.org/almalinux/9/isos/x86_64/AlmaLinux-9-latest-x86_64-dvd.iso
 
 Passo 1 – Baixe as dependências
