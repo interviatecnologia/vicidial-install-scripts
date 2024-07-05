@@ -28,6 +28,39 @@ zypper in libjansson4*
 
 zypper install sqlite3-devel mariadb-server mariadb make patch gcc gcc-c++ subversion php php-devel php-gd gd-devel php-mbstring php-mcrypt php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel httpd libpcap libpcap-devel libnet ncurses ncurses-devel screen mysql-devel ntp mutt wget nano unzip sipsak sox libuuid-devel httpd php-common php-pdo mod_ssl perl-DBI perl-DBD-MySQL perl-Digest-HMAC perl-YAML perl-ExtUtils-ParseXS perl-NetAddr-IP perl-Crypt-SSLeay perl-Curses perl-DBD-Pg perl-Module-ScanDeps perl-Text-CSV perl-HTML-Template perl-IO-Compress perl-Text-Glob perl-Jcode perl-Test-Script perl-Archive-Tar perl-Test-Base perl-OLE-Storage_Lite perl-Archive-Zip perl-Net-Server perl-Convert-ASN1 perl perl-Compress-Raw-Zlib perl-Digest-SHA1 perl-Data-Dumper perl-Error perl-ExtUtils-CBuilder perl-Test-Tester perl-Parse-RecDescent perl-Spiffy perl-IO-Zlib perl-Module-Build perl-HTML-Parser perl-Net-SSLeay perl-Proc-ProcessTable perl-TermReadKey perl-Term-ReadLine-Gnu perl-Digest-SHA perl-Tk perl-Net-SNMP perl-Test-NoWarnings perl-XML-Writer perl-Proc-PID-File perl-Compress-Raw-Bzip2 perl-libwww-perl perl-XML-Parser perl-File-Remove perl-Parse-CPAN-Meta perl-Set-Scalar perl-Probe-Perl perl-File-Which perl-Package-Constants perl-Module-Install perl-File-HomeDir perl-Spreadsheet-ParseExcel perl-Mail-Sendmail perl-Spreadsheet-XLSX asterisk-perl perl-version perl-Crypt-DES perl-URI perl-Net-Daemon perl-IO-stringy perl-YAML-Tiny perl-HTML-Tagset perl-Socket6 perl-BSD-Resource perl-IPC-Run3 perl-Text-CSV_XS perl-Unicode-Map perl-Net-Telnet perl-PAR-Dist perl-Date-Manip perl-JSON rrdtool perl-rrdtool lame screen iftop htop perl-GD gcc gcc-c++- bzip2 make libjansson-devel dahdi-linux-devel libxml2-tools libxml2-2 libxml2-devel libuuid-devel sqlite3-devel
 
+#################################################################
+
+###(Use a tecla Enter ou de espaço para rolar o texto por linhas ou páginas.)
+
+###Mensagem do pacote mariadb:
+
+###You have just installed MariaDB server for the first time.
+
+##You can start it via:
+##  systemctl start mariadb
+##  or
+##  rcmysql start
+
+##During the first start, empty database will be created for you automatically.
+
+##PLEASE REMEMBER TO SET A PASSWORD FOR THE MariaDB root USER!
+##To do so, start the server and run the following commands:
+
+##'/usr/bin/mysqladmin' -u root password 'new-password'
+##'/usr/bin/mysqladmin' -u root -h <hostname> password 'new-password'
+
+##Alternatively you can run:
+##'/usr/bin/mysql_secure_installation'
+
+##which will also give you the option of removing the test
+##databases and anonymous user created by default. This is
+##strongly recommended for production servers.
+-----------------------------------------------------------------------------
+##(Pressione 'q' para sair do paginador.)
+
+###############################################################################
+
+
 perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
 
 cpan -i String::CRC Tk::TableMatrix Net::Address::IP::Local Term::ReadLine::Gnu Spreadsheet::Read Net::Address::IPv4::Local RPM::Specfile Spreadsheet::XLSX Spreadsheet::ReadSXC MD5 Digest::MD5 Digest::SHA1 Bundle::CPAN Pod::Usage Getopt::Long DBI DBD::mysql Net::Telnet Time::HiRes Net::Server Mail::Sendmail Unicode::Map Jcode Spreadsheet::WriteExcel OLE::Storage_Lite Proc::ProcessTable IO::Scalar Scalar::Util Spreadsheet::ParseExcel Archive::Zip Compress::Raw::Zlib Spreadsheet::XLSX Test::Tester Spreadsheet::ReadSXC Text::CSV Test::NoWarnings Text::CSV_PP File::Temp Text::CSV_XS Spreadsheet::Read LWP::UserAgent HTML::Entities HTML::Strip HTML::FormatText HTML::TreeBuilder Switch Time::Local MIME::POP3Client Mail::IMAPClient Mail::Message IO::Socket::SSL readline 
@@ -45,6 +78,8 @@ cpanm YAML MD5 Digest::MD5 Digest::SHA1 Curses Getopt::Long Net::Domain Term::Re
 
 ### Create DB & Cron user
 mysql
+### EM CASO DE ERRO = RESOLVE = ##Alternatively you can run:
+##'/usr/bin/mysql_secure_installation'
 CREATE DATABASE `asterisk` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 CREATE USER 'cron'@'localhost' IDENTIFIED BY '1234';
 GRANT SELECT,INSERT,UPDATE,DELETE,LOCK TABLES on asterisk.* TO cron@'%' IDENTIFIED BY '1234';
@@ -55,11 +90,13 @@ flush privileges;
 exit
 
 ### Install Asterisk 16 ###
-mkdir /usr/src/asterisk
+cd /usr/src/
 wget http://download.vicidial.com/beta-apps/asterisk-16.17.0-vici.tar.gz
 tar -xzvf asterisk-16.17.0-vici.tar.gz
+cd /usr/src/asterisk-16.17.0-vici
 ./configure --libdir=/usr/lib64 --with-pjproject-bundled -with-jansson-bundled
 make && make install && make samples && make config && make basic-pbx
+### EM CASO DE ERRO: RESOLVE = 'mv menuselect.makeopts menuselect.makeopts.old'
 /usr/share/astguiclient/start_asterisk_boot.pl
 
 ###Want to upgrade to Asterisk 18? Click (https://dialer.one/how-to-upgrade-asterisk-13-16-to-asterisk-18/)
