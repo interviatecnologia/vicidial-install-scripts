@@ -38,6 +38,8 @@ zypper in autoconf gcc make libtool
 zypper in *kernel-default*
 Press 2 when it gives you options
 
+reboot
+
 Step 3 – Compile Dahdi
 Run the following commands:
 
