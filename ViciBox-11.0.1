@@ -19,7 +19,7 @@ zypper addrepo https://download.opensuse.org/repositories/home:interstar001:Cent
 zypper refresh
 zypper ref
 zypper up
-zypper in dahdi*
+zypper in dahdi*   ( ### ERRO : downgrade de kernel ACESSE : 'https://dialer.one/how-to-fix-vicibox-11-after-kernel-update/' )
 zypper in libpri*
 zypper in libedit*
 zypper in net-snmp*
@@ -97,7 +97,7 @@ cd /usr/src/asterisk-16.17.0-vici
 ./configure --libdir=/usr/lib64 --with-pjproject-bundled -with-jansson-bundled
 make && make install && make samples && make config && make basic-pbx
 ### EM CASO DE ERRO: RESOLVE = 'mv menuselect.makeopts menuselect.makeopts.old'
-/usr/share/astguiclient/start_asterisk_boot.pl
+/usr/share/astguiclient/start_asterisk_boot.pl   #####  VERIFICAR ERRO #####
 
 ###Want to upgrade to Asterisk 18? Click (https://dialer.one/how-to-upgrade-asterisk-13-16-to-asterisk-18/)
 
@@ -114,6 +114,9 @@ ALTER TABLE phones ALTER template_id SET DEFAULT '';
 quit
 
 /usr/src/astguiclient/trunk/install.pl
+### em caso de erro : chmod 777 install.pl
+/usr/share/astguiclient/start_asterisk_boot.pl  #### REPETIR PROCESSO
+
 /usr/share/astguiclient/ADMIN_area_code_populate.pl
 /usr/src/astguiclient/trunk/bin/ADMIN_update_server_ip.pl
 
@@ -157,6 +160,7 @@ systemctl enable apache2
 ### load dahdi drivers
 modprobe dahdi
 /usr/sbin/dahdi_cfg -vvvvvvvvvvvvv
+### ERRO : downgrade de kernel ACESSE : 'https://dialer.one/how-to-fix-vicibox-11-after-kernel-update/' E REPETIR PROCESSO
 
 ### sleep for 20 seconds before launching Asterisk
 sleep 20
