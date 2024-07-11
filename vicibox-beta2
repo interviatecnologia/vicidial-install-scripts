@@ -7,7 +7,7 @@ timedatectl set-timezone America/Sao_Paulo
 export LC_ALL=pt_BR.UTF-8
 
 zypper update
-zypper install kernel*
+##zypper install kernel*
 ##pressione # 2 para todas as 4 opções que ele lhe dá
 
 zypper ar https://download.opensuse.org/repositories/home:/vicidial:/asterisk-16/openSUSE_Leap_15.5/home:vicidial:asterisk-16.repo
