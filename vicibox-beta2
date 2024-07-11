@@ -11,14 +11,29 @@ zypper update
 ##pressione # 2 para todas as 4 opções que ele lhe dá
 
 zypper ar https://download.opensuse.org/repositories/home:/vicidial:/asterisk-16/openSUSE_Leap_15.5/home:vicidial:asterisk-16.repo
+zypper ar https://mirrorcache-us.opensuse.org/update/leap/15.5/oss/openSUSE:Leap:15.5:Update.repo
+zypper ar https://mirrorcache-us.opensuse.org/repositories/devel:/languages:/perl/15.5/devel:languages:perl.repo
+zypper ar https://mirrorcache-us.opensuse.org/repositories/devel:/languages:/php/openSUSE_Leap_15.5/devel:languages:php.repo
+##zypper ar https://mirrorcache-us.opensuse.org/repositories/devel:/languages:/python/15.5/devel:languages:python.repo
+zypper ar https://mirrorcache-us.opensuse.org/repositories/devel:/languages:/python/15.6/devel:languages:python.repo
+zypper ar https://mirrorcache-us.opensuse.org/repositories/home:/vicidial/openSUSE_Leap_15.5/home:vicidial.repo
+zypper ar https://mirrorcache-us.opensuse.org/repositories/home:/vicidial:/vicibox/openSUSE_Leap_15.5/home:vicidial:vicibox.repo
+zypper ar https://mirrorcache-us.opensuse.org/repositories/home:/zippy:/jx:/packages-ready/15.4/home:zippy:jx:packages-ready.repo
+zypper addrepo https://download.opensuse.org/repositories/home:interstar001:Centreon/15.5/home:interstar001:Centreon.repo
+
+zypper refresh
+zypper ref
+zypper up
+zypper in dahdi*   ( ### ERRO : downgrade de kernel ACESSE : 'https://dialer.one/how-to-fix-vicibox-11-after-kernel-update/' )
+
 
 zypper ref
 zypper up
 
-zypper in libpri*
+##zypper in libpri*
 zypper in libedit*
 zypper in net-snmp*
-zypper in libjansson4*
+##zypper in libjansson4*
 
 zypper install asterisk
 ##pressione # 2 para todas as opções que ele lhe dá
@@ -159,29 +174,6 @@ tar xzf dahdi-linux-complete-*
 tar xzf libpri-*
 
 cd /usr/src/asterisk/dahdi-linux-complete-3.4.0+3.4.0/                           
-
-
-
-
-zypper ar https://mirrorcache-us.opensuse.org/update/leap/15.5/oss/openSUSE:Leap:15.5:Update.repo
-zypper ar https://mirrorcache-us.opensuse.org/repositories/devel:/languages:/perl/15.5/devel:languages:perl.repo
-zypper ar https://mirrorcache-us.opensuse.org/repositories/devel:/languages:/php/openSUSE_Leap_15.5/devel:languages:php.repo
-##zypper ar https://mirrorcache-us.opensuse.org/repositories/devel:/languages:/python/15.5/devel:languages:python.repo
-zypper ar https://mirrorcache-us.opensuse.org/repositories/devel:/languages:/python/15.6/devel:languages:python.repo
-zypper ar https://mirrorcache-us.opensuse.org/repositories/home:/vicidial/openSUSE_Leap_15.5/home:vicidial.repo
-zypper ar https://mirrorcache-us.opensuse.org/repositories/home:/vicidial:/vicibox/openSUSE_Leap_15.5/home:vicidial:vicibox.repo
-zypper ar https://mirrorcache-us.opensuse.org/repositories/home:/zippy:/jx:/packages-ready/15.4/home:zippy:jx:packages-ready.repo
-zypper addrepo https://download.opensuse.org/repositories/home:interstar001:Centreon/15.5/home:interstar001:Centreon.repo
-
-zypper refresh
-zypper ref
-zypper up
-zypper in dahdi*   ( ### ERRO : downgrade de kernel ACESSE : 'https://dialer.one/how-to-fix-vicibox-11-after-kernel-update/' )
-
-
-
-
-
 
 perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
 
