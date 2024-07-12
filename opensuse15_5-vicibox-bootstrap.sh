@@ -59,10 +59,10 @@ if [ ! -z "$CDTEST" ]; then
 fi
 
 # Add repositories
-$ZYPPER ar https://download.opensuse.org/repositories/home:/vicidial/openSUSE_Leap_15.3/home:vicidial.repo 
-$ZYPPER ar https://download.opensuse.org/repositories/home:/vicidial:/asterisk-13/openSUSE_Leap_15.3/home:vicidial:asterisk-13.repo 
-$ZYPPER ar https://download.opensuse.org/repositories/home:/vicidial:/vicibox/openSUSE_Leap_15.3/home:vicidial:vicibox.repo 
-$ZYPPER ar https://download.opensuse.org/repositories/devel:/languages:/perl/openSUSE_Leap_15.3/devel:languages:perl.repo
+$ZYPPER ar https://download.opensuse.org/repositories/home:/vicidial/openSUSE_Leap_15.5/home:vicidial.repo
+$ZYPPER ar https://download.opensuse.org/repositories/home:/vicidial:/asterisk-16/openSUSE_Leap_15.5/home:vicidial:asterisk-16.repo
+$ZYPPER ar https://download.opensuse.org/repositories/home:/vicidial:/vicibox/openSUSE_Leap_15.5/home:vicidial:vicibox.repo 
+$ZYPPER ar https://download.opensuse.org/repositories/devel:/languages:/perl/15.5/devel:languages:perl.repo
 $ZYPPER --gpg-auto-import-keys refresh
 $ZYPPER --non-interactive in -t pattern lamp_server
 $ZYPPER --non-interactive in home_vicidial:libjansson4
