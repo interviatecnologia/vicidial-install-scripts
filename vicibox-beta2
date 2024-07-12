@@ -164,15 +164,13 @@ mkdir /usr/src/asterisk
 cd /usr/src/asterisk
 wget http://downloads.asterisk.org/pub/telephony/libpri/libpri-1-current.tar.gz
 wget http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz
-wget http://download.vicidial.com/beta-apps/asterisk-16.17.0-vici.tar.gz
-tar xzf asterisk-*
 tar xzf dahdi-linux-complete-*
 tar xzf libpri-*
 
 cd /usr/src/asterisk/dahdi-linux-complete-3.4.0+3.4.0/   
 Step 2 – Download kernel update and needed compile tools
 zypper in autoconf gcc make libtool
-##zypper in *kernel-default*
+zypper in *kernel-default*
 ##Press 2 when it gives you options
 
 reboot
@@ -194,6 +192,11 @@ Step 4 – Run modprobe for dahdi and check to make sure its working
 modprobe dahdi
 dahdi_cfg -v
 
+cd /usr/src/asterisk/libpri-1.6.1/
+make
+make install
+make install-config
+
 ### Create DB & Cron user
 mysql
 ### EM CASO DE ERRO = RESOLVE = ##Alternatively you can run:
@@ -208,10 +211,10 @@ flush privileges;
 exit
 
 ### Install Asterisk 16 ###
-cd /usr/src/
+cd /usr/src/asterisk
 wget http://download.vicidial.com/beta-apps/asterisk-16.17.0-vici.tar.gz
 tar -xzvf asterisk-16.17.0-vici.tar.gz
-cd /usr/src/asterisk-16.17.0-vici
+cd /usr/src/asterisk/asterisk-16.17.0-vici
 ./configure --libdir=/usr/lib64 --with-pjproject-bundled -with-jansson-bundled
 make && make install && make samples && make config && make basic-pbx
 ### EM CASO DE ERRO: RESOLVE = 'mv menuselect.makeopts menuselect.makeopts.old'
