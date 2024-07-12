@@ -226,6 +226,8 @@ make
 make install 
 ldconfig
 
+##########################################################################################################################################
+
 #Install Dahdi
 echo "Install Dahdi"
 ln -sf /usr/lib/modules/$(uname -r)/vmlinux.xz /boot/
