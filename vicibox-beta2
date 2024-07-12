@@ -26,10 +26,6 @@ zypper ref
 zypper up
 ##zypper in dahdi*   ( ### ERRO : downgrade de kernel ACESSE : 'https://dialer.one/how-to-fix-vicibox-11-after-kernel-update/' )
 
-
-zypper ref
-zypper up
-
 ##zypper in libpri*
 zypper in libedit*
 zypper in net-snmp*
