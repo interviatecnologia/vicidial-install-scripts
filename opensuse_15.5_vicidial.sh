@@ -1,77 +1,104 @@
 #!/bin/sh
 
-echo "Vicidial installation AlmaLinux/RockyLinux"
+echo "Vicidial installation Opensuse Leap-15.5"
 
-export LC_ALL=C
+timedatectl set-timezone America/Sao_Paulo
 
+### Global node configuration, applicable to any server role
 
-yum groupinstall "Development Tools" -y
+# Export a usable path so things work right
+PATH="/sbin:/usr/sbin:/usr/local/sbin:/root/bin:/usr/local/bin:/usr/bin:/bin"
+export PATH
+cd /tmp # Go somewhere safe
 
-yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-yum -y install yum-utils
-dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm -y
-dnf install https://rpms.remirepo.net/enterprise/remi-release-9.rpm -y
-dnf module enable php:remi-7.4 -y
-dnf module enable mariadb:10.5 -y
+# If we are in debug, then give useful wget and CLI output, otherwise be quiet about it
+WGET="wget -nv"
+ZYPPER='zypper'
+if [ "${0}" == "debug" ]; then
+	WGET="wget"
+	ZYPPER='zypper'
+fi
 
-dnf -y install dnf-plugins-core
+# Simple check for directory, make if doesn't exist subversion
+function checkdir {
+	if [ ! -d $1 ]; then
+		echo -n " Creating dir $1..."
+		mkdir -p $1
+		echo "done."
+	fi
+}
 
-yum install -y php screen php-mcrypt subversion php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo php-opcache -y 
-yum in -y wget unzip make patch gcc gcc-c++ subversion php php-devel php-gd gd-devel readline-devel php-mbstring php-mcrypt 
-yum in -y php-imap php-ldap php-mysqli php-odbc php-pear php-xml php-xmlrpc curl curl-devel perl-libwww-perl ImageMagick 
-yum in -y newt-devel libxml2-devel kernel-devel sqlite-devel libuuid-devel sox sendmail lame-devel htop iftop perl-File-Which
-yum in -y php-opcache libss7 mariadb-devel libss7* libopen* 
-yum in -y sqlite-devel httpd mod_ssl nano chkconfig htop atop mytop iftop
-yum in -y libedit-devel uuid* libxml2* speex*
+# Checks to see if the file exists in the current directory unless directory is supplied, and then downloads it
+function checkget {
+	# Check to see if we are supplied a target directory, otherwise assume current directory
+	if [ -z "$2" ]; then
+		LOCALDIR="$PWD"
+	else
+		LOCALDIR="$2"
+	fi
+	
+	# Make sure directory exists
+	checkdir "$LOCALDIR"
+	cd $LOCALDIR
+	
+	# And now check for our file and download if it's not there
+	FILE="${1##*/}"
+	if [ ! -f $FILE ]; then
+		echo -n " Downloading $1..."
+		$WGET $1 -O $PWD/$FILE
+		echo "done."
+	fi
+	
+	# If we were provided a file mask, apply it
+	if [ ! -z "$3" ]; then
+		chmod $3 $PWD/$FILE
+	fi
+}
 
+# Sometimes the CD gets left in as a repo, so check and remove it
+CDTEST=`zypper lr --url | grep cd: | awk '{split($0,a,"|"); print a[1]}'`
+if [ ! -z "$CDTEST" ]; then
+        echo "Removing CD-Rom repository"
+		$ZYPPER rr $CDTEST
+fi
 
-dnf --enablerepo=crb install libsrtp-devel -y
-dnf config-manager --set-enabled crb
-yum install libsrtp-devel -y
+# Add repositories
+$ZYPPER ar https://download.opensuse.org/repositories/home:/vicidial/openSUSE_Leap_15.5/home:vicidial.repo
+$ZYPPER ar https://download.opensuse.org/repositories/home:/vicidial:/asterisk-16/openSUSE_Leap_15.5/home:vicidial:asterisk-16.repo
+$ZYPPER ar https://download.opensuse.org/repositories/home:/vicidial:/vicibox/openSUSE_Leap_15.5/home:vicidial:vicibox.repo 
+$ZYPPER ar https://download.opensuse.org/repositories/devel:/languages:/perl/15.5/devel:languages:perl.repo
+$ZYPPER ar https://mirrorcache-us.opensuse.org/repositories/devel:/languages:/php/openSUSE_Leap_15.5/devel:languages:php.repo
+$ZYPPER ar https://mirrorcache-us.opensuse.org/repositories/devel:/languages:/python:/azure/15.5/devel:languages:python:azure.repo
+$ZYPPER ar https://mirrorcache-us.opensuse.org/update/leap/15.5/oss/openSUSE:Leap:15.5:Update.repo
+$ZYPPER ar https://download.opensuse.org/repositories/home:/zippy:/jx:/packages-ready/15.5/home:zippy:jx:packages-ready.repo
+$ZYPPER ar addrepo https://download.opensuse.org/repositories/home:interstar001:Centreon/15.5/home:interstar001:Centreon.repo
 
-tee -a /etc/httpd/conf/httpd.conf <<EOF
+$ZYPPER --gpg-auto-import-keys refresh
+$ZYPPER --non-interactive in -t pattern lamp_server
+$ZYPPER --non-interactive in home_vicidial:libjansson4
+$ZYPPER --non-interactive in adaptec-firmware aggregate apache2-mod_cband asterisk-dahdi bmon ddclient dhcp-client digitemp extundelete fonts-config git gnu_ddrescue htop iftop iotop iprelay iptraf-ng lame lshw lvm2 memtest86+ mlocate mpt-firmware mtop mtr mydumper mytop ncftp net-tools-deprecated ngrep-sip nmap numad ntp openr2 OpenIPMI patch pcapsipdump perl-MIME-Lite perl-Net-SFTP-Foreign perl-MySQL-Diff perl-Term-ANSIColor phpMyAdmin php7-opcache pico ploticus python-eyeD3 recode sensord sensors sipp shim sngrep sshfs stress-ng sysstat tcpdump telnet vicibox-dynportal vicibox-firewall vicibox-install vicibox-ssl voicesync-kmp-default vsftpd zip
+$ZYPPER --non-interactive up
 
-CustomLog /dev/null common
-
-Alias /RECORDINGS/MP3 "/var/spool/asterisk/monitorDONE/MP3/"
-
-<Directory "/var/spool/asterisk/monitorDONE/MP3/">
-    Options Indexes MultiViews
-    AllowOverride None
-    Require all granted
-</Directory>
-EOF
-
-sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-tee -a /etc/php.ini <<EOF
-
-error_reporting  =  E_ALL & ~E_NOTICE
-memory_limit = 448M
-short_open_tag = On
-max_execution_time = 3330
-max_input_time = 3360
-post_max_size = 448M
-upload_max_filesize = 442M
-default_socket_timeout = 3360
-date.timezone = America/Sao_Paulo
-EOF
-
-
-systemctl restart httpd
-
-
-dnf install -y mariadb-server mariadb
-
-dnf -y install dnf-plugins-core
-dnf config-manager --set-enabled powertools
-
+$ZYPPER in php screen php-mcrypt subversion php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo php-opcache
+$ZYPPER in wget unzip make patch gcc gcc-c++ subversion php php-devel php-gd gd-devel readline-devel php-mbstring php-mcrypt
+$ZYPPER in php-imap php-ldap php-mysqli php-odbc php-pear php-xml php-xmlrpc curl curl-devel perl-libwww-perl ImageMagick 
+$ZYPPER in newt-devel libxml2-devel kernel-devel sqlite-devel libuuid-devel sox sendmail lame-devel htop iftop perl-File-Which
+$ZYPPER in libss7 mariadb-devel libss7* libopen*
+$ZYPPER in make patch gcc gcc-c++ subversion php php-devel php-gd gd-devel php-mbstring php-mcrypt php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel httpd libpcap libpcap-devel libnet ncurses ncurses-devel screen mysql-devel ntp mutt wget nano unzip sipsak sox libuuid-devel
+$ZYPPER in mariadb-server mariadb
+$ZYPPER in sqlite-devel httpd mod_ssl nano chkconfig htop atop mytop iftop
+$ZYPPER in libedit-devel uuid* libxml2* speex*
+$ZYPPER in libsrtp-devel elfutils-libelf-devel libedit-devel
+$ZYPPER in net-snmp*
+$ZYPPER addrepo https://download.opensuse.org/repositories/devel:languages:perl/15.5/devel:languages:perl.repo
+$ZYPPER in httpd php-common php-pdo mod_ssl perl-DBI perl-DBD-MySQL perl-Digest-HMAC perl-YAML
+$ZYPPER in perl-ExtUtils-ParseXS perl-NetAddr-IP perl-Crypt-SSLeay perl-Curses perl-DBD-Pg perl-Module-ScanDeps perl-Text-CSV perl-HTML-Template perl-IO-Compress perl-Text-Glob perl-Jcode perl-Test-Script perl-Archive-Tar perl-Test-Base perl-OLE-Storage_Lite perl-Archive-Zip perl-Net-Server perl-Convert-ASN1 perl perl-Compress-Raw-Zlib perl-Digest-SHA1 perl-Data-Dumper perl-Error perl-ExtUtils-CBuilder perl-Test-Tester perl-Parse-RecDescent perl-Spiffy perl-IO-Zlib perl-Module-Build perl-HTML-Parser perl-Net-SSLeay perl-Proc-ProcessTable perl-TermReadKey perl-Term-ReadLine-Gnu perl-Digest-SHA perl-Tk perl-Net-SNMP perl-Test-NoWarnings perl-XML-Writer perl-Proc-PID-File perl-Compress-Raw-Bzip2 perl-libwww-perl perl-XML-Parser perl-File-Remove perl-Parse-CPAN-Meta perl-Set-Scalar perl-Probe-Perl perl-File-Which perl-Package-Constants perl-Module-Install perl-File-HomeDir perl-Spreadsheet-ParseExcel perl-Mail-Sendmail
+$ZYPPER in perl-Spreadsheet-XLSX asterisk-perl perl-version perl-Crypt-DES perl-URI perl-Net-Daemon perl-IO-stringy perl-YAML-Tiny perl-HTML-Tagset perl-Socket6 perl-BSD-Resource perl-IPC-Run3 perl-Text-CSV_XS perl-Unicode-Map perl-Net-Telnet perl-PAR-Dist perl-Date-Manip perl-JSON perl-rrdtool lame screen iftop dahdi-linux-devel perl-GD
 
 systemctl enable mariadb
 
 cp /etc/my.cnf /etc/my.cnf.original
 echo "" > /etc/my.cnf
-
 
 cat <<MYSQLCONF>> /etc/my.cnf
 [mysql.server]
@@ -162,7 +189,7 @@ systemctl restart mariadb.service
 
 echo "Install Perl"
 
-yum install -y perl-CPAN perl-YAML perl-CPAN-DistnameInfo perl-libwww-perl perl-DBI perl-DBD-MySQL perl-GD perl-Env perl-Term-ReadLine-Gnu perl-SelfLoader perl-open.noarch 
+zypper in perl-CPAN perl-YAML perl-CPAN-DistnameInfo perl-libwww-perl perl-DBI perl-DBD-MySQL perl-GD perl-Env perl-Term-ReadLine-Gnu perl-SelfLoader perl-open.noarch 
 
 #CPM install
 cd /usr/src/vicidial-install-scripts
@@ -177,10 +204,6 @@ cd asterisk-perl-0.08
 perl Makefile.PL
 make all
 make install 
-
-yum install libsrtp-devel -y
-yum install -y elfutils-libelf-devel libedit-devel
-
 
 #Install Lame
 cd /usr/src
