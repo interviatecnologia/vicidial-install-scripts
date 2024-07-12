@@ -234,11 +234,14 @@ use asterisk;
 ALTER TABLE phones ALTER template_id SET DEFAULT '';
 quit
 
+chmod 777 install.pl
 /usr/src/astguiclient/trunk/install.pl
-### em caso de erro : chmod 777 install.pl
-/usr/share/astguiclient/start_asterisk_boot.pl  #### REPETIR PROCESSO
+chmod 777 start_asterisk_boot.pl
+/usr/share/astguiclient/start_asterisk_boot.pl
 
+chmod 777 ADMIN_area_code_populate.pl
 /usr/share/astguiclient/ADMIN_area_code_populate.pl
+chmod 777 ADMIN_update_server_ip.pl
 /usr/src/astguiclient/trunk/bin/ADMIN_update_server_ip.pl
 
 #########################################
