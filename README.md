@@ -6,6 +6,7 @@ Passo 1 – Baixe as dependências
 timedatectl set-timezone America/Sao_Paulo
 
 zypper update
+
 zypper in git
 
 #Disable SELINUX
