@@ -158,7 +158,7 @@ ldconfig
 cd ..
 rm *.tar.gz
 
-***Install Asterisk – Dadhi and libpri
+***Install Dadhi and libpri
 
 mkdir /usr/src/asterisk
 cd /usr/src/asterisk
