@@ -171,21 +171,6 @@ tar xzf libpri-*
 
 cd /usr/src/asterisk/dahdi-linux-complete-3.4.0+3.4.0/                           
 
-perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
-
-cpan -i String::CRC Tk::TableMatrix Net::Address::IP::Local Term::ReadLine::Gnu Spreadsheet::Read Net::Address::IPv4::Local RPM::Specfile Spreadsheet::XLSX Spreadsheet::ReadSXC MD5 Digest::MD5 Digest::SHA1 Bundle::CPAN Pod::Usage Getopt::Long DBI DBD::mysql Net::Telnet Time::HiRes Net::Server Mail::Sendmail Unicode::Map Jcode Spreadsheet::WriteExcel OLE::Storage_Lite Proc::ProcessTable IO::Scalar Scalar::Util Spreadsheet::ParseExcel Archive::Zip Compress::Raw::Zlib Spreadsheet::XLSX Test::Tester Spreadsheet::ReadSXC Text::CSV Test::NoWarnings Text::CSV_PP File::Temp Text::CSV_XS Spreadsheet::Read LWP::UserAgent HTML::Entities HTML::Strip HTML::FormatText HTML::TreeBuilder Switch Time::Local MIME::POP3Client Mail::IMAPClient Mail::Message IO::Socket::SSL readline 
-
-cd /usr/bin/
-curl -LOk http://xrl.us/cpanm
-chmod +x cpanm
-cpanm -f File::Which
-cpanm -f File::HomeDir
-cpanm CPAN::Meta::Requirements
-cpanm -f CPAN
-cpanm -f DBD::mysql
-cpanm User::Identity --force
-cpanm YAML MD5 Digest::MD5 Digest::SHA1 Curses Getopt::Long Net::Domain Term::ReadKey Term::ANSIColor HTML::FormatText MIME::Decoder Mail::POP3Client Mail::Message Crypt::Eksblowfish::Bcrypt
-
 ### Create DB & Cron user
 mysql
 ### EM CASO DE ERRO = RESOLVE = ##Alternatively you can run:
