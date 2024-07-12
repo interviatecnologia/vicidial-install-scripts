@@ -26,6 +26,6 @@ Passo 3 – Execute o instalador
 
 Agora, sim, este é um instalador automático, mas você precisa pressionar Enter algumas vezes e também adicionar o IP do servidor, para não se afastar por muito tempo.
 
-chmod +x alma-rocky9-ast16.sh
+chmod +x opensuse15_5-vicibox-bootstrap.sh
 
-./alma-rocky9-ast16.sh
+./opensuse15_5-vicibox-bootstrap.sh
