@@ -169,7 +169,30 @@ tar xzf asterisk-*
 tar xzf dahdi-linux-complete-*
 tar xzf libpri-*
 
-cd /usr/src/asterisk/dahdi-linux-complete-3.4.0+3.4.0/                           
+cd /usr/src/asterisk/dahdi-linux-complete-3.4.0+3.4.0/   
+Step 2 – Download kernel update and needed compile tools
+zypper in autoconf gcc make libtool
+##zypper in *kernel-default*
+##Press 2 when it gives you options
+
+reboot
+
+Step 3 – Compile Dahdi
+Run the following commands:
+
+make
+make install
+make install-config
+cd tools
+make clean
+make
+make install
+make install-config
+cp /etc/dahdi/system.conf.sample /etc/dahdi/system.conf
+
+Step 4 – Run modprobe for dahdi and check to make sure its working
+modprobe dahdi
+dahdi_cfg -v
 
 ### Create DB & Cron user
 mysql
