@@ -24,7 +24,7 @@ zypper addrepo https://download.opensuse.org/repositories/home:interstar001:Cent
 zypper refresh
 zypper ref
 zypper up
-zypper in dahdi*   ( ### ERRO : downgrade de kernel ACESSE : 'https://dialer.one/how-to-fix-vicibox-11-after-kernel-update/' )
+##zypper in dahdi*   ( ### ERRO : downgrade de kernel ACESSE : 'https://dialer.one/how-to-fix-vicibox-11-after-kernel-update/' )
 
 
 zypper ref
