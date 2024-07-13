@@ -83,9 +83,9 @@ $ZYPPER in php screen php-mcrypt subversion php-cli php-gd php-curl php-mysql ph
 $ZYPPER in wget unzip make patch gcc gcc-c++ subversion php php-devel php-gd gd-devel readline-devel php-mbstring php-mcrypt
 $ZYPPER in php-imap php-ldap php-mysqli php-odbc php-pear php-xml php-xmlrpc curl curl-devel perl-libwww-perl ImageMagick 
 $ZYPPER in newt-devel libxml2-devel kernel-devel sqlite-devel libuuid-devel sox sendmail lame-devel htop iftop perl-File-Which
-$ZYPPER in libss7 mariadb-devel libss7* libopen*
+$ZYPPER in libss7 libss7* libopen*
 $ZYPPER in make patch gcc gcc-c++ subversion php php-devel php-gd gd-devel php-mbstring php-mcrypt php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel httpd libpcap libpcap-devel libnet ncurses ncurses-devel screen mysql-devel ntp mutt wget nano unzip sipsak sox libuuid-devel
-$ZYPPER in mariadb-server mariadb
+$ZYPPER in mariadb-server mariadb  mariadb-devel
 $ZYPPER in sqlite-devel httpd mod_ssl nano chkconfig htop atop mytop iftop
 $ZYPPER in libedit-devel uuid* libxml2* speex*
 $ZYPPER in libsrtp-devel elfutils-libelf-devel libedit-devel
