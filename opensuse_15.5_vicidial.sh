@@ -228,48 +228,52 @@ ldconfig
 
 ##########################################################################################################################################
 
-#Install Dahdi
-echo "Install Dahdi"
-ln -sf /usr/lib/modules/$(uname -r)/vmlinux.xz /boot/
-cd /etc/include
-wget https://dialer.one/newt.h
+***Install Dadhi and libpri
 
-cd /usr/src/
-mkdir dahdi-linux-complete-3.2.0+3.2.0
-cd dahdi-linux-complete-3.2.0+3.2.0
-wget https://dialer.one/dahdi-alma9.zip
-unzip dahdi-alma9.zip
-yum in newt* -y
+mkdir /usr/src
+cd /usr/src
+wget https://downloads.asterisk.org/pub/telephony/libpri/libpri-1.6.1.tar.gz
+wget http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz
+tar xzf dahdi-linux-complete-*
+tar xzf libpri-*
 
-sudo sed -i 's|(netdev, \&wc->napi, \&wctc4xxp_poll, 64);|(netdev, \&wc->napi, \&wctc4xxp_poll);|g' /usr/src/dahdi-linux-complete-3.2.0+3.2.0/linux/drivers/dahdi/wctc4xxp/base.c
-sudo sed -i 's|<linux/pci-aspm.h>|<linux/pci.h>|g' /usr/src/dahdi-linux-complete-3.2.0+3.2.0/linux/include/dahdi/kernel.h
+cd /usr/src/dahdi-linux-complete-3.4.0+3.4.0/   
+Step 2 – Download kernel update and needed compile tools
+zypper in autoconf gcc make libtool
+zypper in *kernel-default*
+##Press 2 when it gives you options
 
-make clean
+reboot
+
+Step 3 – Compile Dahdi
+Run the following commands:
+
 make
 make install
 make install-config
-
-yum -y install dahdi-tools-libs
-
 cd tools
 make clean
 make
 make install
 make install-config
-
 cp /etc/dahdi/system.conf.sample /etc/dahdi/system.conf
+
+Step 4 – Run modprobe for dahdi and check to make sure its working
 modprobe dahdi
-modprobe dahdi_dummy
-/usr/sbin/dahdi_cfg -vvvvvvvvvvvvv
+dahdi_cfg -v
+
+cd /usr/src/libpri-1.6.1/
+make
+make install
+make install-config
 
 read -p 'Press Enter to continue: '
 
 echo 'Continuing...'
 
-#Install Asterisk and LibPRI
-mkdir /usr/src/asterisk
-cd /usr/src/asterisk
-wget https://downloads.asterisk.org/pub/telephony/libpri/libpri-1.6.1.tar.gz
+#Install Asterisk 
+mkdir /usr/src
+cd /usr/src
 wget https://download.vicidial.com/required-apps/asterisk-16.30.1-vici.tar.gz
 tar -xvzf asterisk-*
 tar -xvzf libpri-*
@@ -284,8 +288,6 @@ ldconfig
 
 cd /usr/src/asterisk/asterisk-16.30.1-vici
 
-yum in libuuid-devel libxml2-devel -y
-
 : ${JOBS:=$(( $(nproc) + $(nproc) / 2 ))}
 ./configure --libdir=/usr/lib64 --with-gsm=internal --enable-opus --enable-srtp --with-ssl --enable-asteriskssl --with-pjproject-bundled --with-jansson-bundled
 
@@ -299,7 +301,6 @@ menuselect/menuselect --enable res_srtp menuselect.makeopts
 make -j ${JOBS} all
 make install
 make samples
-
 
 read -p 'Press Enter to continue: '
 
@@ -722,7 +723,7 @@ rm -f CHANGES*
 rm -f LICENSE*
 rm -f CREDITS*
 
-yum -y in sox
+zypper in sox
 
 cd /var/lib/asterisk/quiet-mp3
 sox ../mohmp3/macroform-cold_day.wav macroform-cold_day.wav vol 0.25
@@ -796,7 +797,7 @@ WELCOME
 chmod 777 /var/spool/asterisk/monitorDONE
 chkconfig asterisk off
 
-yum in certbot -y
+zypper in certbot 
 systemctl enable certbot-renew.timer
 systemctl start certbot-renew.timer
 ##cd /usr/src/vicidial-install-scripts
@@ -811,6 +812,6 @@ systemctl enable rc-local
 
 read -p 'Press Enter to Reboot: '
 
-echo "Restarting AlmaLinux"
+echo "Restarting"
 
 reboot
