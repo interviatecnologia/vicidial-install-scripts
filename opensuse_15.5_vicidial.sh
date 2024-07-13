@@ -79,18 +79,16 @@ $ZYPPER --non-interactive in home_vicidial:libjansson4
 $ZYPPER --non-interactive in adaptec-firmware aggregate apache2-mod_cband asterisk-dahdi bmon ddclient dhcp-client digitemp extundelete fonts-config git gnu_ddrescue htop iftop iotop iprelay iptraf-ng lame lshw lvm2 memtest86+ mlocate mpt-firmware mtop mtr mydumper mytop ncftp net-tools-deprecated ngrep-sip nmap numad ntp openr2 OpenIPMI patch pcapsipdump perl-MIME-Lite perl-Net-SFTP-Foreign perl-MySQL-Diff perl-Term-ANSIColor phpMyAdmin php7-opcache pico ploticus python-eyeD3 recode sensord sensors sipp shim sngrep sshfs stress-ng sysstat tcpdump telnet vicibox-dynportal vicibox-firewall vicibox-install vicibox-ssl voicesync-kmp-default vsftpd zip
 $ZYPPER --non-interactive up
 
-$ZYPPER in php screen php-mcrypt subversion php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo php-opcache
-$ZYPPER in wget unzip make patch gcc gcc-c++ subversion php php-devel php-gd gd-devel readline-devel php-mbstring php-mcrypt
+$ZYPPER in php screen php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo php-opcache php php-devel gd-devel readline-devel php-mbstring
 $ZYPPER in php-imap php-ldap php-mysqli php-odbc php-pear php-xml php-xmlrpc curl curl-devel perl-libwww-perl ImageMagick 
+$ZYPPER in wget unzip make patch gcc gcc-c++ subversion
 $ZYPPER in newt-devel libxml2-devel kernel-devel sqlite-devel libuuid-devel sox sendmail lame-devel htop iftop perl-File-Which
 $ZYPPER in libss7 libss7* libopen*
-$ZYPPER in make patch gcc gcc-c++ subversion php php-devel php-gd gd-devel php-mbstring php-mcrypt php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel httpd libpcap libpcap-devel libnet ncurses ncurses-devel screen mysql-devel ntp mutt wget nano unzip sipsak sox libuuid-devel
+$ZYPPER in httpd libpcap libpcap-devel libnet ncurses ncurses-devel screen mysql-devel ntp mutt nano sipsak
 $ZYPPER in mariadb-server mariadb  mariadb-devel
-$ZYPPER in sqlite-devel httpd mod_ssl nano chkconfig htop atop mytop iftop
+$ZYPPER in sqlite-devel httpd mod_ssl chkconfig htop atop mytop iftop
 $ZYPPER in libedit-devel uuid* libxml2* speex*
 $ZYPPER in libsrtp-devel elfutils-libelf-devel libedit-devel
-$ZYPPER in net-snmp*
-$ZYPPER addrepo https://download.opensuse.org/repositories/devel:languages:perl/15.5/devel:languages:perl.repo
 $ZYPPER in httpd php-common php-pdo mod_ssl perl-DBI perl-DBD-MySQL perl-Digest-HMAC perl-YAML
 $ZYPPER in perl-ExtUtils-ParseXS perl-NetAddr-IP perl-Crypt-SSLeay perl-Curses perl-DBD-Pg perl-Module-ScanDeps perl-Text-CSV perl-HTML-Template perl-IO-Compress perl-Text-Glob perl-Jcode perl-Test-Script perl-Archive-Tar perl-Test-Base perl-OLE-Storage_Lite perl-Archive-Zip perl-Net-Server perl-Convert-ASN1 perl perl-Compress-Raw-Zlib perl-Digest-SHA1 perl-Data-Dumper perl-Error perl-ExtUtils-CBuilder perl-Test-Tester perl-Parse-RecDescent perl-Spiffy perl-IO-Zlib perl-Module-Build perl-HTML-Parser perl-Net-SSLeay perl-Proc-ProcessTable perl-TermReadKey perl-Term-ReadLine-Gnu perl-Digest-SHA perl-Tk perl-Net-SNMP perl-Test-NoWarnings perl-XML-Writer perl-Proc-PID-File perl-Compress-Raw-Bzip2 perl-libwww-perl perl-XML-Parser perl-File-Remove perl-Parse-CPAN-Meta perl-Set-Scalar perl-Probe-Perl perl-File-Which perl-Package-Constants perl-Module-Install perl-File-HomeDir perl-Spreadsheet-ParseExcel perl-Mail-Sendmail
 $ZYPPER in perl-Spreadsheet-XLSX asterisk-perl perl-version perl-Crypt-DES perl-URI perl-Net-Daemon perl-IO-stringy perl-YAML-Tiny perl-HTML-Tagset perl-Socket6 perl-BSD-Resource perl-IPC-Run3 perl-Text-CSV_XS perl-Unicode-Map perl-Net-Telnet perl-PAR-Dist perl-Date-Manip perl-JSON perl-rrdtool lame screen iftop dahdi-linux-devel perl-GD
@@ -180,10 +178,46 @@ touch /var/log/mysqld/slow-queries.log
 chown -R mysql:mysql /var/log/mysqld
 systemctl restart mariadb
 
-systemctl enable httpd.service
+systemctl enable apache2
 systemctl enable mariadb.service
-systemctl restart httpd.service
+systemctl restart apache2
 systemctl restart mariadb.service
+
+
+###preparing for the next part with MCPAN
+perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
+
+cpan -i String::CRC Tk::TableMatrix Net::Address::IP::Local Term::ReadLine::Gnu Spreadsheet::Read Net::Address::IPv4::Local RPM::Specfile Spreadsheet::XLSX Spreadsheet::ReadSXC
+
+cpan MD5 Digest::MD5 Digest::SHA1 Bundle::CPAN Pod::Usage Getopt::Long DBI DBD::mysql Net::Telnet Time::HiRes Net::Server Mail::Sendmail Unicode::Map Jcode Spreadsheet::WriteExcel OLE::Storage_Lite Proc::ProcessTable IO::Scalar Scalar::Util Spreadsheet::ParseExcel Archive::Zip Compress::Raw::Zlib Spreadsheet::XLSX Test::Tester Spreadsheet::ReadSXC Text::CSV Test::NoWarnings Text::CSV_PP File::Temp Text::CSV_XS Spreadsheet::Read LWP::UserAgent HTML::Entities HTML::Strip HTML::FormatText HTML::TreeBuilder Switch Time::Local MIME::POP3Client Mail::IMAPClient Mail::Message IO::Socket::SSL readline
+
+###copy and paste this at the same time:
+
+cd /usr/bin/
+
+curl -LOk http://xrl.us/cpanm
+chmod +x cpanm
+cpanm -f File::Which
+cpanm -f File::HomeDir
+cpanm CPAN::Meta::Requirements
+cpanm -f CPAN
+cpanm YAML
+cpanm MD5
+cpanm Digest::MD5
+cpanm Digest::SHA1
+cpanm Bundle::CPAN
+cpanm -f DBD::mysql
+cpanm Curses
+cpanm Getopt::Long
+cpanm Net::Domain
+cpanm Term::ReadKey
+cpanm Term::ANSIColor
+cpanm HTML::FormatText
+cpanm MIME::Decoder
+cpanm Mail::POP3Client
+cpanm User::Identity –force
+cpanm Mail::Message
+cpanm Crypt::Eksblowfish::Bcrypt
 
 #Install Perl Modules
 
@@ -191,10 +225,10 @@ echo "Install Perl"
 
 zypper in perl-CPAN perl-YAML perl-CPAN-DistnameInfo perl-libwww-perl perl-DBI perl-DBD-MySQL perl-GD perl-Env perl-Term-ReadLine-Gnu perl-SelfLoader perl-open.noarch 
 
-#CPM install
-cd /usr/src/vicidial-install-scripts
-curl -fsSL https://raw.githubusercontent.com/skaji/cpm/main/cpm | perl - install -g App::cpm
-/usr/local/bin/cpm install -g
+#####CPM install
+#cd /usr/src/vicidial-install-scripts
+#curl -fsSL https://raw.githubusercontent.com/skaji/cpm/main/cpm | perl - install -g App::cpm
+#/usr/local/bin/cpm install -g
 
 #Install Asterisk Perl
 cd /usr/src
@@ -230,7 +264,6 @@ ldconfig
 
 ***Install Dadhi and libpri
 
-mkdir /usr/src
 cd /usr/src
 wget https://downloads.asterisk.org/pub/telephony/libpri/libpri-1.6.1.tar.gz
 wget http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz
@@ -244,10 +277,12 @@ zypper in *kernel-default*
 ##Press 2 when it gives you options
 
 reboot
+####################################################################################
 
 Step 3 – Compile Dahdi
 Run the following commands:
 
+cd /usr/src/dahdi-linux-complete-3.4.0+3.4.0/  
 make
 make install
 make install-config
@@ -272,11 +307,9 @@ read -p 'Press Enter to continue: '
 echo 'Continuing...'
 
 #Install Asterisk 
-mkdir /usr/src
 cd /usr/src
 wget https://download.vicidial.com/required-apps/asterisk-16.30.1-vici.tar.gz
-tar -xvzf asterisk-*
-tar -xvzf libpri-*
+tar -xvzf asterisk-16.30.1-vici
 
 cd /usr/src
 wget https://github.com/cisco/libsrtp/archive/v2.1.0.tar.gz
@@ -286,7 +319,7 @@ cd libsrtp-2.1.0
 make shared_library && sudo make install
 ldconfig
 
-cd /usr/src/asterisk/asterisk-16.30.1-vici
+cd /usr/src/asterisk-16.30.1-vici
 
 : ${JOBS:=$(( $(nproc) + $(nproc) / 2 ))}
 ./configure --libdir=/usr/lib64 --with-gsm=internal --enable-opus --enable-srtp --with-ssl --enable-asteriskssl --with-pjproject-bundled --with-jansson-bundled
@@ -301,6 +334,7 @@ menuselect/menuselect --enable res_srtp menuselect.makeopts
 make -j ${JOBS} all
 make install
 make samples
+make basic-pbx
 
 read -p 'Press Enter to continue: '
 
@@ -338,6 +372,22 @@ update servers set asterisk_version='16.30.1';
 quit
 MYSQLCREOF
 
+
+####################################################
+
+####ALTERNATIVA 1
+
+chmod 777 install.pl
+/usr/src/astguiclient/trunk/install.pl
+/usr/share/astguiclient/start_asterisk_boot.pl
+
+chmod 777 ADMIN_area_code_populate.pl
+/usr/share/astguiclient/ADMIN_area_code_populate.pl
+chmod 777 ADMIN_update_server_ip.pl
+/usr/src/astguiclient/trunk/bin/ADMIN_update_server_ip.pl
+
+##### ALTERNATIVA 2
+
 read -p 'Press Enter to continue: '
 
 echo 'Continuing...'
@@ -352,7 +402,7 @@ cat <<ASTGUI>> /etc/astguiclient.conf
 PATHhome => /usr/share/astguiclient
 PATHlogs => /var/log/astguiclient
 PATHagi => /var/lib/asterisk/agi-bin
-PATHweb => /var/www/html
+PATHweb => /usr/local/apache2/htdocs  ####  /var/www/html ( CENTOS )
 PATHsounds => /var/lib/asterisk/sounds
 PATHmonitor => /var/spool/asterisk/monitor
 PATHDONEmonitor => /var/spool/asterisk/monitorDONE
@@ -551,106 +601,58 @@ crontab -l
 
 #Install rc.local
 
-sudo sed -i 's|exit 0|### exit 0|g' /etc/rc.d/rc.local
+#########################################
+nano /etc/rc.local
 
-tee -a /etc/rc.d/rc.local <<EOF
+### paste this below: 
 
+#!/bin/sh
+#
+# This script will be executed *after* all the other init scripts.
+# You can put your own initialization stuff in here if you don't
+# want to do the full Sys V style init stuff.
+
+touch /var/lock/subsys/local
+
+###########################################
 
 # OPTIONAL enable ip_relay(for same-machine trunking and blind monitoring)
-
 /usr/share/astguiclient/ip_relay/relay_control start 2>/dev/null 1>&2
 
-
 # Disable console blanking and powersaving
-
 /usr/bin/setterm -blank
-
 /usr/bin/setterm -powersave off
-
 /usr/bin/setterm -powerdown
 
-
 ### start up the MySQL server
-
 systemctl start mariadb.service
-
+systemctl enable mariadb.service
 
 ### start up the apache web server
-
-systemctl start httpd.service
-
+systemctl start apache2
+systemctl enable apache2
 
 ### roll the Asterisk logs upon reboot
-
 /usr/share/astguiclient/ADMIN_restart_roll_logs.pl
 
-
 ### clear the server-related records from the database
-
 /usr/share/astguiclient/AST_reset_mysql_vars.pl
 
-
 ### load dahdi drivers
-
 modprobe dahdi
-modprobe dahdi_dummy
-
 /usr/sbin/dahdi_cfg -vvvvvvvvvvvvv
-
+### ERRO : downgrade de kernel ACESSE : 'https://dialer.one/how-to-fix-vicibox-11-after-kernel-update/' E REPETIR PROCESSO
 
 ### sleep for 20 seconds before launching Asterisk
-
 sleep 20
 
-
 ### start up asterisk
-
 /usr/share/astguiclient/start_asterisk_boot.pl
 
-exit 0
 
-EOF
+############## END PASTE HERE ##################
 
-chmod +x /etc/rc.d/rc.local
-systemctl enable rc-local
-systemctl start rc-local
 
-##########################################################################EDITADO#########################################
-##Install CyburPhone
-##cd /var/www/html
-##git clone https://github.com/carpenox/CyburPhone.git
-##chmod -R 744 CyburPhone
-##chown -R apache:apache CyburPhone
-
-##Install Dynportal
-##yum install -y firewalld
-##cd /home
-##wget https://dialer.one/dynportal.zip
-##wget https://dialer.one/firewall.zip
-##wget https://dialer.one/aggregate
-##wget https://dialer.one/VB-firewall
-
-##mkdir -p /var/www/vhosts/dynportal
-##mv /home/dynportal.zip /var/www/vhosts/dynportal/
-##mv /home/firewall.zip /etc/firewalld/
-##cd /var/www/vhosts/dynportal/
-##unzip dynportal.zip
-##chmod -R 755 *
-##chown -R apache:apache *
-##cd etc/httpd/conf.d/
-##mv viciportal-ssl.conf viciportal.conf /etc/httpd/conf.d/
-##cd /etc/firewalld/
-##unzip -o firewall.zip
-##cd zones/
-##rm -rf public.xml trusted.xml
-##cd /etc/firewalld/
-##mv -bf public.xml trusted.xml /etc/firewalld/zones/
-##mv /home/aggregate /usr/bin/
-##chmod +x /usr/bin/aggregate
-##mv /home/VB-firewall /usr/bin/
-##chmod +x /usr/bin/VB-firewall
-
-##firewall-offline-cmd --add-port=446/tcp --zone=public
 ####################################################################END###############################################
 ##Fix ip_relay
 cd /usr/src/astguiclient/trunk/extras/ip_relay/
@@ -723,8 +725,6 @@ rm -f CHANGES*
 rm -f LICENSE*
 rm -f CREDITS*
 
-zypper in sox
-
 cd /var/lib/asterisk/quiet-mp3
 sox ../mohmp3/macroform-cold_day.wav macroform-cold_day.wav vol 0.25
 sox ../mohmp3/macroform-cold_day.gsm macroform-cold_day.gsm vol 0.25
@@ -753,17 +753,6 @@ tee -a ~/.bashrc <<EOF
 /usr/sbin/asterisk -V
 EOF
 
-##sed -i 's|#Banner none|Banner /etc/ssh/sshd_banner|g' /etc/ssh/sshd_config
-
-##tee -a /etc/ssh/sshd_banner <<EOF
-##Thank you for choosing CyburDial and carpenox's auto installer!
-
-##Visit our Knowledge Base at https://www.dialer.one
-
-##Support: info@dialer.one
-##Skype Live Chat Support: https://join.skype.com/ujkQ7i5lV78O
-##EOF
-
 #add rc-local as a service - thx to ras
 tee -a /etc/systemd/system/rc-local.service <<EOF
 [Unit]
@@ -789,23 +778,23 @@ systemctl daemon-reload
 sudo systemctl enable rc-local.service
 sudo systemctl start rc-local.service
 
-cat <<WELCOME>> /var/www/html/index.html
-<META HTTP-EQUIV=REFRESH CONTENT="1; URL=/vicidial/welcome.php">
-Please Hold while I redirect you!
-WELCOME
+#cat <<WELCOME>> /var/www/html/index.html
+#<META HTTP-EQUIV=REFRESH CONTENT="1; URL=/vicidial/welcome.php">
+#Please Hold while I redirect you!
+#WELCOME
 
 chmod 777 /var/spool/asterisk/monitorDONE
-chkconfig asterisk off
+##chkconfig asterisk off
 
 zypper in certbot 
 systemctl enable certbot-renew.timer
 systemctl start certbot-renew.timer
 ##cd /usr/src/vicidial-install-scripts
 ##chmod +x vicidial-enable-webrtc.sh
-service firewalld stop
+#service firewalld stop
 ##./vicidial-enable-webrtc.sh
-service firewalld start
-systemctl enable firewalld
+#service firewalld start
+#systemctl enable firewalld
 systemctl enable rc-local
 
 ##mv /etc/httpd/conf.d/viciportal-ssl.conf /etc/httpd/conf.d/viciportal-ssl.conf.off
@@ -815,3 +804,5 @@ read -p 'Press Enter to Reboot: '
 echo "Restarting"
 
 reboot
+
+##go to http://127.0.0.1/vicidial/admin.php
