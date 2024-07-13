@@ -606,6 +606,8 @@ nano /etc/rc.local
 
 ### paste this below: 
 
+### paste this below: 
+
 #!/bin/sh
 #
 # This script will be executed *after* all the other init scripts.
@@ -613,8 +615,6 @@ nano /etc/rc.local
 # want to do the full Sys V style init stuff.
 
 touch /var/lock/subsys/local
-
-###########################################
 
 # OPTIONAL enable ip_relay(for same-machine trunking and blind monitoring)
 /usr/share/astguiclient/ip_relay/relay_control start 2>/dev/null 1>&2
@@ -641,7 +641,6 @@ systemctl enable apache2
 ### load dahdi drivers
 modprobe dahdi
 /usr/sbin/dahdi_cfg -vvvvvvvvvvvvv
-### ERRO : downgrade de kernel ACESSE : 'https://dialer.one/how-to-fix-vicibox-11-after-kernel-update/' E REPETIR PROCESSO
 
 ### sleep for 20 seconds before launching Asterisk
 sleep 20
