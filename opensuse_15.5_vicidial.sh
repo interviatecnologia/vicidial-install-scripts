@@ -71,7 +71,7 @@ $ZYPPER ar https://mirrorcache-us.opensuse.org/repositories/devel:/languages:/ph
 $ZYPPER ar https://mirrorcache-us.opensuse.org/repositories/devel:/languages:/python:/azure/15.5/devel:languages:python:azure.repo
 $ZYPPER ar https://mirrorcache-us.opensuse.org/update/leap/15.5/oss/openSUSE:Leap:15.5:Update.repo
 $ZYPPER ar https://download.opensuse.org/repositories/home:/zippy:/jx:/packages-ready/15.5/home:zippy:jx:packages-ready.repo
-$ZYPPER ar addrepo https://download.opensuse.org/repositories/home:interstar001:Centreon/15.5/home:interstar001:Centreon.repo
+$ZYPPER ar https://download.opensuse.org/repositories/home:interstar001:Centreon/15.5/home:interstar001:Centreon.repo
 
 $ZYPPER --gpg-auto-import-keys refresh
 $ZYPPER --non-interactive in -t pattern lamp_server
