@@ -1,5 +1,5 @@
 ESTE TRABALHO FOI EXTRAIDO DE CARPENOX, COM ALGUMAS ADEQUAÇÕES PARA MAIS DETALHES SOBRE O TRABALHO ORIGINAL.
-ACESSE : https://github.com/carpenox/vicidial-install-scripts
+ACESSE : https://github.com/carpenox/vicidial-install-scripts - www.dialer.one for our full knowledge base
 
 Como – Instalar o Vicidial no OPEN SUSE 
 
