@@ -1,3 +1,6 @@
+ESTE TRABALHO FOI EXTRAIDO DE CARPENOX, COM ALGUMAS ADEQUAÇÕES PARA MAIS DETALHES SOBRE O TRABALHO ORIGINAL.
+ACESSE : https://github.com/carpenox/vicidial-install-scripts
+
 Como – Instalar o Vicidial no OPEN SUSE 
 
 
